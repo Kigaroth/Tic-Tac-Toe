@@ -20,16 +20,14 @@ char turn = 'X';
 bool game_won = false;
 
 //funtctions//
-int calculateWinner();
-
 void set_player() { //sets the players turn.
     if (player == 'O') { //sets player 1s turn
         player = 'X';
-        std::cout << "\n Player 1s turn. Please select a number 1-9: ";
+        std::cout << "\n Player 1s turn.";
     }
     else { //sets player 2s turn
         player = 'O';
-        std::cout << "\n Player 2s turn. Please select a number 1-9: ";
+        std::cout << "\n Player 2s turn.";
     }
 }
 
@@ -40,7 +38,7 @@ void user_input() { //let's the user input their choice:
     bool input_exists = false;
 
     do {
-        
+        std::cout << " Please select a number 1 - 9: ";
         std::cin >> player_input;
 
         if (player_input == 0 || player_input > 9) { //Checks if user input is valid or not.
@@ -54,27 +52,87 @@ void user_input() { //let's the user input their choice:
                     input_exists = true;
                 }
             }
-            
         }
+
         if (!input_exists){
-            std::cout << "\n Invalid input, try again. \n Type a new choice here: ";
+            std::cout << "\n Box is already filled! Try again!\n";
         }
 
     } while (player_input == 0 || player_input > 9 || input_exists == false);
-
-
 }
 
 void display_board() { //prints the board
-    std::cout << "Player 1 is [X], Player 2 is [O]\n"; //lets the player know which symbol belongs to them.
+    std::cout << "\n Player 1 is [X], Player 2 is [O]\n"; //lets the player know which symbol belongs to them.
     for (int i = 0; i < board.size(); i++) {
         if (i % 3 == 0) {
-            std::cout << "\n-------------\n| ";
+            std::cout << "\n -------------\n | ";
         }
         std::cout << board[i] << " | ";
     }
-    std::cout << "\n-------------";
+    std::cout << "\n -------------";
     std::cout << std::endl;
+}
+
+
+int calculate_winner(int p) {
+    
+    char is_X_or_O;
+
+    if (p == 1) {
+        is_X_or_O = 'X';
+    }
+    else
+        is_X_or_O = 'O';
+
+    if ((board[1] == is_X_or_O) && (board[2] == is_X_or_O) && (board[3] == is_X_or_O)) {
+        game_won = true;
+    }
+    else if ((board[4] == is_X_or_O) && (board[5] == is_X_or_O) && (board[6] == is_X_or_O)) {
+        game_won = true;
+    }
+    else if ((board[7] == is_X_or_O) && (board[8] == is_X_or_O) && (board[9] == is_X_or_O)) {
+        game_won = true;
+    }
+    else if ((board[1] == is_X_or_O) && (board[4] == is_X_or_O) && (board[7] == is_X_or_O)) {
+        game_won = true;
+    }
+    else if ((board[2] == is_X_or_O) && (board[5] == is_X_or_O) && (board[8] == is_X_or_O)) {
+        game_won = true;
+    }
+    else if ((board[3] == is_X_or_O) && (board[6] == is_X_or_O) && (board[9] == is_X_or_O)) {
+        game_won = true;
+    }
+    else if ((board[1] == is_X_or_O) && (board[5] == is_X_or_O) && (board[9] == is_X_or_O)) {
+        game_won = true;
+    }
+    else if ((board[3] == is_X_or_O) && (board[5] == is_X_or_O) && (board[7] == is_X_or_O)) {
+        game_won = true;
+    }
+    if (game_won){
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+void calculate_winner() {
+
+    int p1 = calculate_winner(1);
+    int p2 = 0;
+    if (p1 == 1) {
+        std::cout << "\n Player 1 is the winner!";
+    }
+    else {
+        p2 = calculate_winner(2);
+        if (p2 == 1) {
+            std::cout << "\n Player 2 is the winner!";
+        }
+        else {
+            std::cout << "There are no winners.";
+
+        }
+    }
 }
 
 int main()
@@ -98,18 +156,13 @@ int main()
 
     std::cout << "***********Tic-Tac-Toe!***********\n\n";
     
-    display_board();
-    set_player();
-    user_input();
-    display_board();
-    set_player();
-    user_input();
-    display_board();
-    set_player();
-    user_input();
-    display_board();
-
-
+    do {
+        display_board();
+        set_player();
+        user_input();
+        calculate_winner();
+    } while (!game_won);
+        
 }
 
     //two player game//
