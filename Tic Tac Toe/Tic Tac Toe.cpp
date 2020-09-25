@@ -74,7 +74,7 @@ void display_board() { //prints the board
 }
 
 
-int calculate_winner(int p) {
+bool check_winner(int p) {
 
     char is_X_or_O;
 
@@ -85,65 +85,46 @@ int calculate_winner(int p) {
         is_X_or_O = 'O';
 
     if ((board[0] == is_X_or_O) && (board[1] == is_X_or_O) && (board[2] == is_X_or_O)) {
-        game_won = true;
+        return true;
     }
     else if ((board[3] == is_X_or_O) && (board[4] == is_X_or_O) && (board[5] == is_X_or_O)) {
-        game_won = true;
+        return true;
     }
     else if ((board[6] == is_X_or_O) && (board[7] == is_X_or_O) && (board[8] == is_X_or_O)) {
-        game_won = true;
+        return true;
     }
     else if ((board[0] == is_X_or_O) && (board[3] == is_X_or_O) && (board[6] == is_X_or_O)) {
-        game_won = true;
+        return true;
     }
     else if ((board[1] == is_X_or_O) && (board[4] == is_X_or_O) && (board[7] == is_X_or_O)) {
-        game_won = true;
+        return true;
     }
     else if ((board[2] == is_X_or_O) && (board[5] == is_X_or_O) && (board[8] == is_X_or_O)) {
-        game_won = true;
+        return true;
     }
     else if ((board[0] == is_X_or_O) && (board[4] == is_X_or_O) && (board[8] == is_X_or_O)) {
-        game_won = true;
+        return true;
     }
     else if ((board[2] == is_X_or_O) && (board[4] == is_X_or_O) && (board[6] == is_X_or_O)) {
-        game_won = true;
+        return true;
     }
-    if (game_won) {
+
+    //default return
+    return false;
+}
+
+int calculate_winner() {
+
+    if (check_winner(1)) {
+        game_won = true;
         return 1;
     }
-    else {
-        return 0;
+    else if (check_winner(2)) {
+        game_won = true;
+        return 2;
     }
+    return 0;
 }
-
-void calculate_winner() {
-
-    int p1 = calculate_winner(1);
-    int p2 = 0;
-    if (p1 == 1) {
-        std::cout << "\n Player 1 is the winner!";
-    }
-    else {
-        p2 = calculate_winner(2);
-        if (p2 == 1) {
-            std::cout << "\n Player 2 is the winner!";
-        }
-        else {
-
-        }
-    }
-}
-
-void calculate_draw() {
-
-    char is_X_or_O = 'X' || 'O';
-
-    if ((board[0] == is_X_or_O) && (board[1] == is_X_or_O) && (board[2] == is_X_or_O) && (board[3] == is_X_or_O) && (board[4] == is_X_or_O) && (board[5] == is_X_or_O) && (board[6] == is_X_or_O) && (board[7] == is_X_or_O) && (board[8] == is_X_or_O)){
-        game_draw = true;
-        std::cout << "\n The game has reached a draw. Game over.";
-    }
-}
-
 
 int main()
 {
@@ -176,11 +157,20 @@ int main()
         set_player();
         user_input();
         if (turn > 4) {
-            calculate_winner();
-            calculate_draw();
+            int winner = calculate_winner();
+            if (winner == 1){
+                std::cout << "\n Player 1 is the winner!";
+            }
+            else if (winner == 2) {
+                std::cout << "\n Player 2 is the winner!";
+            }
+            else if (turn == 9) {
+                std::cout << "\n The game has reached a draw. \n Game over";
+                game_draw = true;
+            }
         }
         display_board();
-    } while (!game_won || !game_draw);
+    } while (!game_won && !game_draw);
         
 }
 
