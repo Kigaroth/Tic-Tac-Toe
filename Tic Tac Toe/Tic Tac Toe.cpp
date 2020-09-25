@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 #include <stdlib.h>
+#include <cstdlib>
+#include <ctime>
 
 //int//
 int number_of_players;
@@ -29,6 +31,17 @@ void set_player() { //sets the players turn.
     else { //sets player 2s turn
         player = 'O';
         std::cout << "\n Player 2s turn.";
+    }
+}
+
+void set_ai() { //sets the players turn.
+    if (player == 'O') { //sets player 1s turn
+        player = 'X';
+        std::cout << "\n Player 1s turn.";
+    }
+    else { //sets AIs turn
+        player = 'O';
+        std::cout << "\n Computers turn.";
     }
 }
 
@@ -126,6 +139,27 @@ int calculate_winner() {
     return 0;
 }
 
+void ai_player() {
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    int ai_input = 0;
+    bool input_exists = false;
+    do {
+        ai_input = std::rand() % 9 + 1;
+        if (player == 'O') {
+            { //If the AI input is valid, the function swaps the number on the board to the users character (X or O depending on the player).
+                for (int i = 0; i < board.size(); i++) {
+                    if (('0' + ai_input) == board[i]) {
+                        board[i] = player;
+                        input_exists = true;
+                        std::cout << "AI player chose: " << ai_input << std::endl;
+                    }
+                }
+            }
+        }
+    } while (ai_input == 0 || ai_input > 9 || input_exists == false);
+}
+
+
 int main()
 {
     //start screen - Asks the user how many will be playing, and transfers the user to the version of the game they asked for.
@@ -145,45 +179,67 @@ int main()
 
     system("CLS");
 
-    //game screen//
+    //game screen one player
+    if (number_of_players == 1) {
+        std::cout << "***********Tic-Tac-Toe!***********\n\n";
+        std::cout << "\n Player 1 is [X], AI is [O]\n"; //lets the player know which symbol belongs to them.
 
-    std::cout << "***********Tic-Tac-Toe!***********\n\n";
-    std::cout << "\n Player 1 is [X], Player 2 is [O]\n"; //lets the player know which symbol belongs to them.
-
-    int turn = 0;
-    display_board();
-    do {
-        turn++;
-        set_player();
-        user_input();
-        if (turn > 4) {
-            int winner = calculate_winner();
-            if (winner == 1){
-                std::cout << "\n Player 1 is the winner!";
-            }
-            else if (winner == 2) {
-                std::cout << "\n Player 2 is the winner!";
-            }
-            else if (turn == 9) {
-                std::cout << "\n The game has reached a draw. \n Game over";
-                game_draw = true;
-            }
-        }
+        int turn = 0;
         display_board();
-    } while (!game_won && !game_draw);
-        
+        do {
+            turn++;
+            set_player();
+            if (player == 'X') {
+                user_input();
+            }
+            else{
+                ai_player();
+            }
+            
+            if (turn > 4) {
+                int winner = calculate_winner();
+                if (winner == 1) {
+                    std::cout << "\n Player 1 is the winner!";
+                }
+                else if (winner == 2) {
+                    std::cout << "\n The computer is the winner!";
+                }
+                else if (turn == 9) {
+                    std::cout << "\n The game has reached a draw. \n Game over";
+                    game_draw = true;
+                }
+            }
+            display_board();
+        } while (!game_won && !game_draw);
+    }
+    //game screen two players
+
+    else if (number_of_players == 2) {
+        std::cout << "***********Tic-Tac-Toe!***********\n\n";
+        std::cout << "\n Player 1 is [X], Player 2 is [O]\n"; //lets the player know which symbol belongs to them.
+
+        int turn = 0;
+        display_board();
+        do {
+            turn++;
+            set_player();
+            user_input();
+            if (turn > 4) {
+                int winner = calculate_winner();
+                if (winner == 1) {
+                    std::cout << "\n Player 1 is the winner!";
+                }
+                else if (winner == 2) {
+                    std::cout << "\n Player 2 is the winner!";
+                }
+                else if (turn == 9) {
+                    std::cout << "\n The game has reached a draw. \n Game over";
+                    game_draw = true;
+                }
+            }
+            display_board();
+        } while (!game_won && !game_draw);
+    }
 }
 
-    //two player game//
-
-//    if (number_of_players == 2){
-//        do {
-//
-//            display_board();
-//
-//        } while (game_won == false);
-//    }
-//
-//   
-//}
 
