@@ -173,7 +173,8 @@ void replay() { //asks the user if they want to replay, as well as resets the va
         else {
             system("CLS");
             replay_game = false;
-            std::cout << "\n Thanks for playing! :)\n";
+            std::cout << "\n Thanks for playing! :) \n";
+            system("pause");
         }
     }
 }
